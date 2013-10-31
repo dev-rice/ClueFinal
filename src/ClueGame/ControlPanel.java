@@ -1,31 +1,127 @@
 package ClueGame;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.jws.Oneway;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
+import board.Board;
 
 public class ControlPanel extends JPanel {
-	public ControlPanel(){
+	
+	ControlPanel(){
 		super();
-		JButton button = new JButton();
+		setSize(600, 300);
 		
-		setLayout(new GridLayout(4,1));
+
+		add(turnPanel());
+		add(buttonPanel(), BorderLayout.CENTER);
+		add(otherPanel(), BorderLayout.SOUTH);
+	}
+
+
+	private Component turnPanel() {
+		JPanel turnPanel = new JPanel();
+		JTextField turn = new JTextField(15);
+		JLabel turnLabel = new JLabel("Whose turn?");
+		turn.setFont(new Font("SanSerif", Font.BOLD, 12));
+		turn.setEditable(false);
 		
-		button.setSize(500, 500);
+		turnPanel.add(turnLabel);
+		turnPanel.add(turn);
 		
-		button.addActionListener(new ActionListener() {
-		     public void actionPerformed(ActionEvent e)
-		     {
-		        System.out.println("You clicked me!");
-		     }
-		});
-		//Uncomment if you dare.
-		//add(button);
+		return turnPanel;
+	}
+	
+	
+	public JPanel buttonPanel(){
+		JButton nextPlayerButton = new JButton("Next Player");
+		JButton accusationButton = new JButton("Make an Accusation");
+		
+		nextPlayerButton.addActionListener(new nextPlayerListener());
+		
+		accusationButton.addActionListener(new accusationListener());
+		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(0,2));
+	;
+		buttonPanel.add(nextPlayerButton);
+		buttonPanel.add(accusationButton);
+		
+		return buttonPanel;
+	}
+	
+	public JPanel otherPanel(){
+		JTextField dieRoll = new JTextField(3);
+		dieRoll.setFont(new Font("SanSerif", Font.BOLD, 10));
+		dieRoll.setEditable(false);
+		JLabel guessLabel = new JLabel("Guess");
+		JTextField guess = new JTextField(10);
+		guess.setEditable(false);
+		JLabel guessResult = new JLabel("Response");
+		JTextField result = new JTextField(10);
+		result.setEditable(false);
+		JPanel panel = new JPanel();
+		JPanel panel1 = new JPanel();
+		JPanel panel2 = new JPanel();
+		JPanel panel3 = new JPanel();
+		
+		panel.setPreferredSize(new Dimension(650, 100));
+		
+		panel1.add(dieRoll);
+		panel1.setBorder(new TitledBorder (new EtchedBorder(), "Die Roll"));
+		panel1.setPreferredSize(new Dimension(75, 50));
+		
+		panel2.add(guessLabel);
+		panel2.add(guess);
+		panel2.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
+		panel2.setPreferredSize(new Dimension(200, 50));
+		
+		panel3.add(guessResult);
+		panel3.add(result);
+		panel3.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result"));
+		panel3.setPreferredSize(new Dimension(200, 50));
+		
+		panel.add(panel1);
+		panel.add(panel2);
+		panel.add(panel3);
+		return panel;
+	}
+	
+	private class nextPlayerListener implements ActionListener{
+
+		public void actionPerformed(ActionEvent arg0) {
+			int ready = JOptionPane.showConfirmDialog(null, 
+					"Are you ready to continue?");
+				if (ready == JOptionPane.YES_OPTION){
+					JOptionPane.showMessageDialog(null, "Here we go!");
+				}else{
+					JOptionPane.showMessageDialog(null, "OK, we'll wait");
+				}
+		}
+				
+		
+	}
+	private class accusationListener implements ActionListener{
+
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 	
 }

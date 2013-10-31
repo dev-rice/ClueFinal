@@ -53,15 +53,15 @@ public class ClueGame extends JFrame {
 		// All JFrame things
 
 		add(board, BorderLayout.CENTER);
-		setSize(896,896);
+		setSize(700,700);
 		setTitle("Clue Game");
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
 		
-		//ControlPanel control_panel = new ControlPanel();
-		//add(control_panel, BorderLayout.EAST);
+		ControlPanel control_panel = new ControlPanel();
+		add(control_panel, BorderLayout.SOUTH);
 		
 		for (Player player : players) {
 			if (player instanceof HumanPlayer) {
