@@ -36,6 +36,8 @@ public class ClueGame extends JFrame {
 	private boolean game_running;
 	private Board board;
 	private Notes notes;
+	private Player human_player;
+	private Splash splash;
 	
 	public ClueGame(String deck) {
 		// Should have the initialization of the game
@@ -65,10 +67,12 @@ public class ClueGame extends JFrame {
 		
 		for (Player player : players) {
 			if (player instanceof HumanPlayer) {
-				add(new CardsPanel(player), BorderLayout.EAST);
+				human_player = player;
 			}
 		}
+		add(new CardsPanel(human_player), BorderLayout.EAST);
 		
+		splash = new Splash(human_player);
 	}
 	
 	private JMenu createFileMenu() {
@@ -295,11 +299,17 @@ public class ClueGame extends JFrame {
 		return deck;
 	}
 	
+	public void openSplash(){
+		splash.setVisible(true);
+	}
+	
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame("deck.txt");
 		
 		game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		game.setVisible(true);
+		game.openSplash();
 
 	}
 }
