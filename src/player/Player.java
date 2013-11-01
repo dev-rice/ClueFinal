@@ -6,6 +6,7 @@ import java.awt.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Stack;
 
 import board.BoardCell;

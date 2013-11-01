@@ -21,11 +21,15 @@ import javax.swing.border.TitledBorder;
 import board.Board;
 
 public class ControlPanel extends JPanel {
-	
+
+	private boolean next_turn = false;
+
+	JButton nextPlayerButton;
+
 	ControlPanel(){
 		super();
 		setSize(600, 300);
-		
+
 
 		add(turnPanel());
 		add(buttonPanel(), BorderLayout.CENTER);
@@ -39,31 +43,48 @@ public class ControlPanel extends JPanel {
 		JLabel turnLabel = new JLabel("Whose turn?");
 		turn.setFont(new Font("SanSerif", Font.BOLD, 12));
 		turn.setEditable(false);
-		
+
 		turnPanel.add(turnLabel);
 		turnPanel.add(turn);
-		
+
 		return turnPanel;
 	}
-	
-	
+
+
+	public boolean isNextTurn(){
+		//System.out.println(next_turn);
+		return next_turn;
+	}
+
+	public void endTurn(){
+		next_turn = false;
+		nextPlayerButton.setEnabled(true);
+
+	}
+
 	public JPanel buttonPanel(){
-		JButton nextPlayerButton = new JButton("Next Player");
+		nextPlayerButton = new JButton("Next Player");
 		JButton accusationButton = new JButton("Make an Accusation");
-		
-		nextPlayerButton.addActionListener(new nextPlayerListener());
-		
+
+		nextPlayerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				next_turn = true;
+				nextPlayerButton.setEnabled(false);
+			}
+		});
+
 		accusationButton.addActionListener(new accusationListener());
-		
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(0,2));
-	;
+		;
 		buttonPanel.add(nextPlayerButton);
 		buttonPanel.add(accusationButton);
-		
+
 		return buttonPanel;
 	}
-	
+
 	public JPanel otherPanel(){
 		JTextField dieRoll = new JTextField(3);
 		dieRoll.setFont(new Font("SanSerif", Font.BOLD, 10));
@@ -78,50 +99,50 @@ public class ControlPanel extends JPanel {
 		JPanel panel1 = new JPanel();
 		JPanel panel2 = new JPanel();
 		JPanel panel3 = new JPanel();
-		
+
 		panel.setPreferredSize(new Dimension(650, 100));
-		
+
 		panel1.add(dieRoll);
 		panel1.setBorder(new TitledBorder (new EtchedBorder(), "Die Roll"));
 		panel1.setPreferredSize(new Dimension(75, 50));
-		
+
 		panel2.add(guessLabel);
 		panel2.add(guess);
 		panel2.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
 		panel2.setPreferredSize(new Dimension(200, 50));
-		
+
 		panel3.add(guessResult);
 		panel3.add(result);
 		panel3.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result"));
 		panel3.setPreferredSize(new Dimension(200, 50));
-		
+
 		panel.add(panel1);
 		panel.add(panel2);
 		panel.add(panel3);
 		return panel;
 	}
-	
+
 	private class nextPlayerListener implements ActionListener{
 
 		public void actionPerformed(ActionEvent arg0) {
 			int ready = JOptionPane.showConfirmDialog(null, 
 					"Are you ready to continue?");
-				if (ready == JOptionPane.YES_OPTION){
-					JOptionPane.showMessageDialog(null, "Here we go!");
-				}else{
-					JOptionPane.showMessageDialog(null, "OK, we'll wait");
-				}
+			if (ready == JOptionPane.YES_OPTION){
+				//JOptionPane.showMessageDialog(null, "Here we go!");
+			}else{
+				//JOptionPane.showMessageDialog(null, "OK, we'll wait");
+			}
 		}
-				
-		
+
+
 	}
 	private class accusationListener implements ActionListener{
 
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
-	
+
 }
