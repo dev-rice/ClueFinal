@@ -1,1 +1,1 @@
-An error was generated with message: Error, board contains invalid parts.
+An error was generated with message: Error, legend formatted wrong

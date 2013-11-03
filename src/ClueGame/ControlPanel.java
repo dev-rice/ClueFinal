@@ -130,12 +130,12 @@ public class ControlPanel extends JPanel {
 		panel1.setBorder(new TitledBorder (new EtchedBorder(), "Die Roll"));
 		panel1.setPreferredSize(new Dimension(75, 50));
 
-		panel2.add(guessLabel);
+		//panel2.add(guessLabel);
 		panel2.add(guess);
 		panel2.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
 		panel2.setPreferredSize(new Dimension(200, 50));
 
-		panel3.add(guessResult);
+		//panel3.add(guessResult);
 		panel3.add(result);
 		panel3.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result"));
 		panel3.setPreferredSize(new Dimension(200, 50));

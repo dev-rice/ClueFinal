@@ -32,14 +32,16 @@ public class ComputerPlayer extends Player{
 		// UNLESS there's a door, pick it, UNLESS we JUST visited the door.
 		// Also, know when you're in a room, instead of moving, make a suggestion.
 
-		System.out.println(name + " is at Row: " + currentCell.getRow() + ", Column: " + currentCell.getColumn());
-		System.out.println("Targets: " + targets);
+		//System.out.println(currentCell);
+		
+		//System.out.println(name + " is at Row: " + currentCell.getRow() + ", Column: " + currentCell.getColumn());
+		//System.out.println("Targets: " + targets);
 		
 		// Iterates through targets looking for the first doorway it can find
 		BoardCell removeMe = null;
 		for(BoardCell cell : targets){
 			if(cell.isDoorWay()){
-				System.out.println("It's a doorway!");
+				//System.out.println("It's a doorway!");
 				if( ((RoomCell)cell).getCellData() != lastRoomVisited ){
 					// If the cell is a doorway, that we haven't visited yet
 					lastRoomVisited = ((RoomCell)cell).getCellData();
@@ -50,6 +52,7 @@ public class ComputerPlayer extends Player{
 					// Then we're done!
 					return;
 				} else {
+					System.out.println(cell);
 					removeMe = cell;
 				}
 			}
@@ -57,7 +60,7 @@ public class ComputerPlayer extends Player{
 		if (removeMe != null && removeMe instanceof RoomCell && removeMe.isDoorWay()){
 			targets.remove(removeMe);
 		}
-
+		//System.out.println("No doors found.");
 		// If no doors are found, randomize the places to pick from
 		Random rand = new Random();
 		//System.out.println(targets.size());

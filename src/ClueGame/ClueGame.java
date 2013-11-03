@@ -33,7 +33,7 @@ public class ClueGame extends JFrame {
 
 	private static String DECK_FILE;
 
-	private static final String HUMAN_PLAYER = "Professor Plum"; 
+	private static final String HUMAN_PLAYER = "Miss Scarlet"; 
 
 	private Solution soln;
 	private ArrayDeque<Player> players;
@@ -285,7 +285,7 @@ public class ClueGame extends JFrame {
 
 	public int rollDie(){
 		Random rand = new Random();
-		return rand.nextInt(6);
+		return rand.nextInt(6) + 1;
 	}
 
 	public void start(){
@@ -299,7 +299,10 @@ public class ClueGame extends JFrame {
 
 		button = control_panel.getNextPlayerButton();
 
-		takeTurn();
+		
+		for (int i = 0; i < 100; ++i){
+			takeTurn();
+		}
 
 	}
 
@@ -307,7 +310,7 @@ public class ClueGame extends JFrame {
 
 		button.setEnabled(false);
 
-		System.out.println(players);
+		//System.out.println(players);
 
 		// Pulling the player whose turn it is
 		// off, using them to take a turn
@@ -316,16 +319,17 @@ public class ClueGame extends JFrame {
 
 		control_panel.setTurn(current_player.getName());
 
-		int die_roll = 2;
+		int die_roll = rollDie();
+		System.out.println("Roll: " + die_roll);
 		control_panel.setDieRoll(die_roll);
 
 		int cell = board.calcIndex(current_player.getCurrentCell().getRow(), current_player.getCurrentCell().getColumn());
-		System.out.println("Cell index: " + cell);
-		System.out.println(board.getAdjacencies(cell));
+		//System.out.println("Cell index: " + cell);
+		//System.out.println(board.getAdjacencies(cell));
 		
-		board.calcTargets(cell, die_roll);
+		board.startTargets(current_player.getCurrentCell().getRow(), current_player.getCurrentCell().getColumn(), die_roll);
 		
-		System.out.println("Targets: " + board.getTargets());
+		//System.out.println("Targets: " + board.getTargets());
 
 		if (current_player instanceof ComputerPlayer){
 			ComputerPlayer temp = (ComputerPlayer) current_player;

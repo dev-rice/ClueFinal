@@ -58,13 +58,15 @@ public class Board extends JPanel {
 		}
 		int size = BoardCell.TILE_SIZE;
 		g.setColor(Color.WHITE);
-		g.drawString("Conservatory", 2*size, 2*size);
+		g.drawString("Conservatory", 0*size, 2*size);
 		g.drawString("Ballroom", 2*size, 11*size);
 		g.drawString("Closet", 3*size, 19*size);
 		g.drawString("Kitchen", 2*size, 24*size);
 		g.drawString("Bathroom", 12*size, 23*size);
-		g.drawString("Bowling Alley", 22*size, 23*size);
-		g.drawString("Potion Room", 22*size, 9*size);
+		g.drawString("Bowling", 22*size, 23*size);
+		g.drawString("Alley", 22*size, 24*size);
+		g.drawString("Potion", 23*size, 9*size);
+		g.drawString("Room", 23*size, 10*size);
 		g.drawString("Garage", 20*size, 2*size);
 		g.drawString("Aquarium", 10*size, 2*size);
 		g.drawString("Stairs", 13*size, 11*size);
@@ -83,7 +85,7 @@ public class Board extends JPanel {
 		}
 	}
 	
-	public void startTargets(int row, int column, int steps){
+	/*public void startTargets(int row, int column, int steps){
 		Arrays.fill(visited,false);
 		calcAdjacencies();
 		targets.clear();
@@ -91,10 +93,19 @@ public class Board extends JPanel {
 		if(cell != -1){
 			visited[cell] = true;
 		}
-		calcTargets(cell,steps);
-	}
+		calcTargets(row, column,steps);
+	}*/
 	
-	public void calcTargets(int cell, int steps){
+	 public void startTargets(int row, int column, int numSteps){
+         Arrays.fill(visited,false);//added for initialization
+         targets.clear();
+         
+         targets.add(getCellAt(calcIndex(row,column)));
+         calcTargets(row, column, numSteps);
+         targets.remove(getCellAt(calcIndex(row,column)));
+ }
+	
+	/*public void calcTargets(int cell, int steps){
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		for (Integer i:adjacencies.get(cell)){
 			if (!visited[i]){
@@ -118,7 +129,36 @@ public class Board extends JPanel {
 			}
 			visited[i] = false;
 		}
-	}
+	}*/
+	
+	 public void calcTargets(int row, int column, int numSteps) {
+         int index = calcIndex(row, column);
+         LinkedList<Integer> tempList = getAdjacencies(index);
+         //System.out.println(tempList);
+         //System.out.println("Index: " + index + " with steps left: " + numSteps);
+         if( numSteps > 0 ){
+                 visited[index] = true;
+                 for(int i = 0; i < tempList.size(); ++i){
+                         BoardCell temp_cell = getCellAt(tempList.get(i));
+                         //System.out.println("Trying " + temp_cell + ", index: " 
+                                         //+ calcIndex(temp_cell.getRow(), temp_cell.getColumn()));
+
+                         if (temp_cell.isDoorWay()){
+                                 //System.out.println("I found a doorway!");
+                                 targets.add(temp_cell);
+                         } else if (! visited[tempList.get(i)]){
+                                 calcTargets(temp_cell.getRow(), temp_cell.getColumn(), numSteps-1);
+                         }
+                 }        
+         } else {
+                 if( !targets.contains(index) && !visited[index] ){
+                         //System.out.println("Added " + index);
+                         targets.add(getCellAt(index));
+                 }
+                 return;
+         }
+         visited[index] = false;
+ }
 	
 	public Set<BoardCell> getTargets(){
 		return targets;
@@ -255,6 +295,8 @@ public class Board extends JPanel {
 				}
 				numRows = numRows + 1;
 			} 
+			numRows = 26;
+			numColumns = 26;
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getLocalizedMessage());
 		}
