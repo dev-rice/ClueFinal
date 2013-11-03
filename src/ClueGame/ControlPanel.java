@@ -26,6 +26,11 @@ public class ControlPanel extends JPanel {
 
 	JButton nextPlayerButton;
 
+	JTextField turn;
+	JTextField dieRoll;
+	JTextField guess;
+	JTextField result;
+	
 	ControlPanel(){
 		super();
 		setSize(600, 300);
@@ -36,10 +41,25 @@ public class ControlPanel extends JPanel {
 		add(otherPanel(), BorderLayout.SOUTH);
 	}
 
-
+	public void setTurn(String name){
+		turn.setText(name);
+	}
+	
+	public void setDieRoll(int roll){
+		dieRoll.setText(Integer.toString(roll));
+	}
+	
+	public void setGuess(String guess){
+		this.guess.setText(guess);
+	}
+	
+	public void setResult(String result){
+		this.result.setText(result);
+	}
+	
 	private Component turnPanel() {
 		JPanel turnPanel = new JPanel();
-		JTextField turn = new JTextField(15);
+		turn = new JTextField(15);
 		JLabel turnLabel = new JLabel("Whose turn?");
 		turn.setFont(new Font("SanSerif", Font.BOLD, 12));
 		turn.setEditable(false);
@@ -52,7 +72,6 @@ public class ControlPanel extends JPanel {
 
 
 	public boolean isNextTurn(){
-		//System.out.println(next_turn);
 		return next_turn;
 	}
 
@@ -61,24 +80,29 @@ public class ControlPanel extends JPanel {
 		nextPlayerButton.setEnabled(true);
 
 	}
+	
+	public JButton getNextPlayerButton(){
+		return nextPlayerButton;
+	}
 
 	public JPanel buttonPanel(){
 		nextPlayerButton = new JButton("Next Player");
 		JButton accusationButton = new JButton("Make an Accusation");
 
-		nextPlayerButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				next_turn = true;
-				nextPlayerButton.setEnabled(false);
-			}
-		});
+//		nextPlayerButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e)
+//			{
+//				next_turn = true;
+//				System.out.println("Setting the next_turn to true.");
+//				nextPlayerButton.setEnabled(false);
+//			}
+//		});
 
 		accusationButton.addActionListener(new accusationListener());
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(0,2));
-		;
+		
 		buttonPanel.add(nextPlayerButton);
 		buttonPanel.add(accusationButton);
 
@@ -86,14 +110,14 @@ public class ControlPanel extends JPanel {
 	}
 
 	public JPanel otherPanel(){
-		JTextField dieRoll = new JTextField(3);
+		dieRoll = new JTextField(3);
 		dieRoll.setFont(new Font("SanSerif", Font.BOLD, 10));
 		dieRoll.setEditable(false);
 		JLabel guessLabel = new JLabel("Guess");
-		JTextField guess = new JTextField(10);
+		guess = new JTextField(10);
 		guess.setEditable(false);
 		JLabel guessResult = new JLabel("Response");
-		JTextField result = new JTextField(10);
+		result = new JTextField(10);
 		result.setEditable(false);
 		JPanel panel = new JPanel();
 		JPanel panel1 = new JPanel();

@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -43,6 +44,8 @@ public class ClueGame extends JFrame {
 	private Player human_player;
 	private Splash splash;
 	private ControlPanel control_panel;
+
+	JButton button;
 
 	public ClueGame(String deck) {
 		// Should have the initialization of the game
@@ -161,23 +164,6 @@ public class ClueGame extends JFrame {
 		return null;
 	}
 
-	// private void runGame(){
-	// 	game_running = true;
-
-	// 	while (game_running){
-	// 		takeTurn();
-
-	// 	}
-
-	// }
-
-
-	public void endTurn(){
-		// Pushes the current player to the end of the 
-		// queue, so it's turn is the farthest away
-		players.push(current_player);
-	}
-
 	public Board getBoard() {
 		return board;
 	}
@@ -259,8 +245,8 @@ public class ClueGame extends JFrame {
 
 	private Stack<Card> loadDeck() {
 		// Reads in Deck's data, adds it to deck, returns deck.
-		List tempList = new ArrayList();
-		Stack deck = new Stack();
+		List<Card> tempList = new ArrayList();
+		Stack<Card> deck = new Stack();
 		String buffer;
 		CardType type = null;
 		try {
@@ -311,25 +297,35 @@ public class ClueGame extends JFrame {
 		}
 		current_player = players.getFirst();
 
+		button = control_panel.getNextPlayerButton();
 
-				takeTurn();
-				takeTurn();
-				takeTurn();
-				
+		takeTurn();
 
 	}
 
 	public void takeTurn(){
+
+		button.setEnabled(false);
+
+		System.out.println(players);
+
 		// Pulling the player whose turn it is
 		// off, using them to take a turn
-		int die_roll = rollDie();
-
 		current_player = players.pop();
+		System.out.println(current_player.getName() + " is taking their turn.");
+
+		control_panel.setTurn(current_player.getName());
+
+		int die_roll = 2;
+		control_panel.setDieRoll(die_roll);
 
 		int cell = board.calcIndex(current_player.getCurrentCell().getRow(), current_player.getCurrentCell().getColumn());
+		System.out.println("Cell index: " + cell);
+		System.out.println(board.getAdjacencies(cell));
 		
 		board.calcTargets(cell, die_roll);
-		System.out.println(board.getTargets());
+		
+		System.out.println("Targets: " + board.getTargets());
 
 		if (current_player instanceof ComputerPlayer){
 			ComputerPlayer temp = (ComputerPlayer) current_player;
@@ -342,14 +338,14 @@ public class ClueGame extends JFrame {
 			}
 
 		}
-		
-		for (BoardCell c : board.getTargets() ) {
+
+		/*for (BoardCell c : board.getTargets() ) {
 			c.revertHighlighted();
 			board.repaint();
-		}
+		}*/
 
-		
 		players.add(current_player);
+		button.setEnabled(true);
 
 	}
 

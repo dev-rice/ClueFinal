@@ -19,8 +19,8 @@ public class clueTest {
 	public static final int NUM_ROWS = 26;
 	public static final int NUM_COLUMNS = 26;
 
-	@BeforeClass
-	public static void setUp() {
+	@Before
+	public void setUp() {
 		board = new Board("Layout.csv", "Legend.csv");
 		board.loadConfigFiles();
 	}
@@ -38,6 +38,8 @@ public class clueTest {
 
 	@Test
 	public void testBoardSize() {
+		System.out.println(board.getNumRows());
+		System.out.println(board.getNumColumns());
 		Assert.assertEquals(NUM_ROWS, board.getNumRows());
 		Assert.assertEquals(NUM_COLUMNS, board.getNumColumns());
 

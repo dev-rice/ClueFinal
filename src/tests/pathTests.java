@@ -42,7 +42,7 @@ public class pathTests {
 			//Walkway against room cell - bottom edge
 			testList = board.getAdjacencies(board.calcIndex(25,17));
 			Assert.assertTrue(testList.contains(board.calcIndex(24,17)));
-			Assert.assertEquals(2, testList.size());
+			Assert.assertEquals(3, testList.size());
 			
 			//left edge only path to right.squished between rooms
 			testList = board.getAdjacencies(board.calcIndex(5,0));

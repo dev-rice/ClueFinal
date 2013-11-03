@@ -44,7 +44,7 @@ public class Board extends JPanel {
 		
 		loadConfigFiles();
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
