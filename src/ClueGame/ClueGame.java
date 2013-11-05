@@ -340,6 +340,7 @@ public class ClueGame extends JFrame {
 			temp.pickLocation(board.getTargets());
 			board.repaint();
 		} else {
+			System.out.println("Human...");
 			control_panel.setDisabled();
 
 			for (BoardCell c : board.getTargets() ) {
@@ -351,6 +352,7 @@ public class ClueGame extends JFrame {
 					if ( c == board.getClicked()){
 						current_player.setCurrentCell(c);
 						board.repaint();
+						board.setClickedtoNull();
 						break;
 					}
 				}

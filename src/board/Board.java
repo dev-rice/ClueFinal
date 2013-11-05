@@ -32,6 +32,7 @@ public class Board extends JPanel implements MouseListener {
 	private Set<BoardCell> targets;
 	private ArrayList<Player> current_players;
 	private BoardCell clicked_cell = null;
+	private boolean onBoard;
 
 	public Board(String layout, String legend) {
 		this.layout = layout;
@@ -316,11 +317,18 @@ public class Board extends JPanel implements MouseListener {
 	public BoardCell getClicked() {
 		return clicked_cell;
 	}
+	
+	public void setClickedtoNull() {
+		clicked_cell = null;
+	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		onBoard = true;
+	}
+	
+	public boolean getOnBoard() {
+		return onBoard;
 	}
 
 	@Override
