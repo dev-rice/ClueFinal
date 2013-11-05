@@ -52,7 +52,11 @@ public class ClueGame extends JFrame {
 	private boolean isHighlighted;
 	private boolean clicking;
 
-	JButton button;
+	private JButton button;
+	private PromptDialog suggestion;
+	private PromptDialog accusation;
+	
+	JButton submit;
 
 	public ClueGame(String deck) {
 		// Should have the initialization of the game
@@ -88,8 +92,10 @@ public class ClueGame extends JFrame {
 		add(new CardsPanel(human_player), BorderLayout.EAST);
 
 		splash = new Splash(human_player);
-		
+
 		warning = new Splash(human_player);
+
+		suggestion = new PromptDialog(loadDeck());
 	}
 
 	private JMenu createFileMenu() {
@@ -307,9 +313,9 @@ public class ClueGame extends JFrame {
 		current_player = players.getFirst();
 
 		button = control_panel.getNextPlayerButton();
-		
+
 		takeTurn();
-		
+
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -339,34 +345,34 @@ public class ClueGame extends JFrame {
 		int cell = board.calcIndex(current_player.getCurrentCell().getRow(), current_player.getCurrentCell().getColumn());
 		//System.out.println("Cell index: " + cell);
 		//System.out.println(board.getAdjacencies(cell));
-		
+
 		board.startTargets(current_player.getCurrentCell().getRow(), current_player.getCurrentCell().getColumn(), die_roll);
-		
+
 		//System.out.println("Targets: " + board.getTargets());
 
 		if (current_player instanceof ComputerPlayer){
-			
+
 			control_panel.setDisabled();
-			
+
 			ComputerPlayer temp = (ComputerPlayer) current_player;
 			temp.pickLocation(board.getTargets());
 			board.repaint();
-			
+
 			if(temp.getCurrentCell().isRoom()){
 				System.out.println("Making a suggestion.");
 				RoomCell c = (RoomCell) temp.getCurrentCell();
 				Suggestion s = temp.createSuggestion(c.getRoomName());
-			
+
 				System.out.println(s);
 				for ( Player p : players) {
 					p.disproveSuggestion(s.getPerson(), s.getWeapon(), s.getRoom());
 				}
 			}
-			
+
 			control_panel.setButtonEnabled();
-			
+
 		} else {
-			
+
 			System.out.println("Human...");
 			control_panel.setDisabled();
 
@@ -375,27 +381,50 @@ public class ClueGame extends JFrame {
 				board.repaint();
 				isHighlighted = true;
 			} 
-			
+
 			board.addMouseListener(new MouseListener() {
-				
+
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					
+
 					for (BoardCell cell : board.getTargets()) {
 						if (cell.containsClick(arg0.getX(),	arg0.getY())){
 							//clicked_cell = cell;
 							clicking = true;
 							current_player.setCurrentCell(cell);
-							
+
 							for (BoardCell c : board.getTargets() ) {
 								c.revertHighlighted();
 								board.repaint();
 								//isHighlighted = false;
 							}
 
+							if (current_player.getCurrentCell().isRoom()){
+					
+								RoomCell room = (RoomCell) current_player.getCurrentCell();
+								suggestion.setRoom(room);
+								
+								suggestion.setVisible(true);
+								
+								System.out.println("this is visible");
+								submit = suggestion.getSubmitButton();
+								submit.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e)
+									{
+										System.out.println("you clicked submit");
+										for ( Player p : players) {
+											p.disproveSuggestion(suggestion.getPerson(), suggestion.getWeapon(), suggestion.getRoom());
+										}
+										suggestion.setVisible(false);
+									}
+								});
+								
+
+							}
+
 							control_panel.setButtonEnabled();
-							warning.setVisible(false);
-							
+
+
 						} else if (!clicking) {
 							System.out.println("ERROR ERROR ERROR, CANT MOVE THERE!");
 						}
@@ -405,28 +434,28 @@ public class ClueGame extends JFrame {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				@Override
 				public void mousePressed(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				@Override
 				public void mouseReleased(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
-	
+
+
 			});
 
 		}
@@ -435,7 +464,7 @@ public class ClueGame extends JFrame {
 
 	}
 
-	
+
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame("deck.txt");
 
