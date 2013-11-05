@@ -89,6 +89,10 @@ public class ControlPanel extends JPanel {
 		nextPlayerButton.setEnabled(false);
 	}
 	
+	public void setButtonEnabled(){
+		nextPlayerButton.setEnabled(true);
+	}
+	
 	public JPanel buttonPanel(){
 		nextPlayerButton = new JButton("Next Player");
 		JButton accusationButton = new JButton("Make an Accusation");

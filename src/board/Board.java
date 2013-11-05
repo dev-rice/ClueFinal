@@ -31,6 +31,7 @@ public class Board extends JPanel implements MouseListener {
 	private boolean[] visited;
 	private Set<BoardCell> targets;
 	private ArrayList<Player> current_players;
+	private BoardCell clicked_cell = null;
 
 	public Board(String layout, String legend) {
 		this.layout = layout;
@@ -87,17 +88,7 @@ public class Board extends JPanel implements MouseListener {
 			adjacencies.put(i, getAdjacencies(i));
 		}
 	}
-	
-	/*public void startTargets(int row, int column, int steps){
-		Arrays.fill(visited,false);
-		calcAdjacencies();
-		targets.clear();
-		int cell = calcIndex(row,column);
-		if(cell != -1){
-			visited[cell] = true;
-		}
-		calcTargets(row, column,steps);
-	}*/
+
 	
 	 public void startTargets(int row, int column, int numSteps){
          Arrays.fill(visited,false);//added for initialization
@@ -108,31 +99,6 @@ public class Board extends JPanel implements MouseListener {
          targets.remove(getCellAt(calcIndex(row,column)));
  }
 	
-	/*public void calcTargets(int cell, int steps){
-		LinkedList<Integer> list = new LinkedList<Integer>();
-		for (Integer i:adjacencies.get(cell)){
-			if (!visited[i]){
-				list.add(i);
-			}
-		}
-		for (Integer i:list){
-			visited[i] = true;
-			if (getCellAt(i).isDoorWay()){
-				if (!targets.contains(getCellAt(i))){
-					targets.add(getCellAt(i));
-				}
-			}
-			else if (steps == 1){
-				if (!targets.contains(getCellAt(i))){
-					targets.add(getCellAt(i));
-				}
-			}
-			else{
-				calcTargets(i,steps-1);
-			}
-			visited[i] = false;
-		}
-	}*/
 	
 	 public void calcTargets(int row, int column, int numSteps) {
          int index = calcIndex(row, column);
@@ -339,14 +305,16 @@ public class Board extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		BoardCell clicked_cell = null;
 		for (BoardCell cell : cells) {
 			if (cell.containsClick(arg0.getX(),	arg0.getY())){
 				clicked_cell = cell;
 			}
 		}
 		System.out.println(clicked_cell);
+	}
+	
+	public BoardCell getClicked() {
+		return clicked_cell;
 	}
 
 	@Override

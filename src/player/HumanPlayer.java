@@ -1,5 +1,6 @@
 package player;
 
+
 public class HumanPlayer extends Player{
 
 	public HumanPlayer(String name) {
@@ -11,5 +12,7 @@ public class HumanPlayer extends Player{
 	public String toString() {
 		return "Human: " + name;
 	}
+	
+	
 
 }

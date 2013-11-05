@@ -314,9 +314,6 @@ public class ClueGame extends JFrame {
 	}
 
 	public void takeTurn(){
-
-		control_panel.setDisabled();
-
 		//System.out.println(players);
 
 		// Pulling the player whose turn it is
@@ -343,17 +340,27 @@ public class ClueGame extends JFrame {
 			temp.pickLocation(board.getTargets());
 			board.repaint();
 		} else {
+			control_panel.setDisabled();
+
 			for (BoardCell c : board.getTargets() ) {
 				c.makeHighlighted();
 				board.repaint();
+			} 
+			while( board.getClicked() == null){
+				for (BoardCell c: board.getTargets()) {
+					if ( c == board.getClicked()){
+						current_player.setCurrentCell(c);
+						board.repaint();
+						break;
+					}
+				}
 			}
-
+			for (BoardCell c : board.getTargets() ) {
+				c.revertHighlighted();
+				board.repaint();
+			}
+			control_panel.setButtonEnabled();
 		}
-
-		/*for (BoardCell c : board.getTargets() ) {
-			c.revertHighlighted();
-			board.repaint();
-		}*/
 
 		players.add(current_player);
 

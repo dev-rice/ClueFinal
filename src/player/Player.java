@@ -93,7 +93,7 @@ public class Player {
 		return currentCell;
 	}
 	
-	public void setCurrentCell(WalkwayCell target){
+	public void setCurrentCell(BoardCell target){
 		// Temporary, only for testing
 		currentCell = target;
 	}
