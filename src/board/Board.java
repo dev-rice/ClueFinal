@@ -2,6 +2,8 @@ package board;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayDeque;
@@ -20,7 +22,7 @@ import javax.swing.JPanel;
 import player.Player;
 import board.RoomCell.DoorDirection;
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener {
 	private ArrayList<BoardCell> cells;
 	private Map<Character,String> rooms;
 	private int numRows, numColumns;
@@ -43,6 +45,7 @@ public class Board extends JPanel {
 		current_players = new ArrayList<Player>();
 		
 		loadConfigFiles();
+		addMouseListener(this);
 	}
 
 	@Override
@@ -332,6 +335,42 @@ public class Board extends JPanel {
 
 	public BoardCell getCellAt(int index){
 		return cells.get(index);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		BoardCell clicked_cell = null;
+		for (BoardCell cell : cells) {
+			if (cell.containsClick(arg0.getX(),	arg0.getY())){
+				clicked_cell = cell;
+			}
+		}
+		System.out.println(clicked_cell);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

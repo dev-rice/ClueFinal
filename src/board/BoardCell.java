@@ -13,6 +13,12 @@ public abstract class BoardCell {
 
 	protected boolean is_highlighted;
 	
+	public boolean containsClick(int x, int y) {
+		System.out.println("X: "  + x + " Y: " + y);
+		return (x >= column * TILE_SIZE) && (x <= (column * TILE_SIZE) + TILE_SIZE)
+				&& (y >= row * TILE_SIZE) && ( y <= (row * TILE_SIZE) + TILE_SIZE);
+	}
+	
 	public boolean isWalkway(){
 		return false;
 	}
