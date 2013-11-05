@@ -44,6 +44,7 @@ public class ClueGame extends JFrame {
 	private Player human_player;
 	private Splash splash;
 	private ControlPanel control_panel;
+	private boolean isHighlighted;
 
 	JButton button;
 
@@ -346,13 +347,15 @@ public class ClueGame extends JFrame {
 			for (BoardCell c : board.getTargets() ) {
 				c.makeHighlighted();
 				board.repaint();
+				isHighlighted = true;
 			} 
-			while( board.getClicked() == null){
+			while(isHighlighted){
+				System.out.println("Something different!");
 				for (BoardCell c: board.getTargets()) {
 					if ( c == board.getClicked()){
 						current_player.setCurrentCell(c);
 						board.repaint();
-						board.setClickedtoNull();
+
 						break;
 					}
 				}
@@ -360,7 +363,9 @@ public class ClueGame extends JFrame {
 			for (BoardCell c : board.getTargets() ) {
 				c.revertHighlighted();
 				board.repaint();
+				isHighlighted = false;
 			}
+
 			control_panel.setButtonEnabled();
 		}
 
@@ -368,6 +373,7 @@ public class ClueGame extends JFrame {
 
 	}
 
+	
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame("deck.txt");
 
