@@ -47,7 +47,7 @@ public class Board extends JPanel implements MouseListener {
 		current_players = new ArrayList<Player>();
 		
 		loadConfigFiles();
-		addMouseListener(this);
+		//addMouseListener(this);
 	}
 
 	@Override

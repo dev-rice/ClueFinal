@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayDeque;
@@ -299,6 +301,9 @@ public class ClueGame extends JFrame {
 		current_player = players.getFirst();
 
 		button = control_panel.getNextPlayerButton();
+		
+		takeTurn();
+		
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -308,9 +313,6 @@ public class ClueGame extends JFrame {
 				//nextPlayerButton.setEnabled(false);
 			}
 		});
-		
-		
-		takeTurn();
 
 	}
 
@@ -341,6 +343,7 @@ public class ClueGame extends JFrame {
 			temp.pickLocation(board.getTargets());
 			board.repaint();
 		} else {
+			
 			System.out.println("Human...");
 			control_panel.setDisabled();
 
@@ -349,24 +352,57 @@ public class ClueGame extends JFrame {
 				board.repaint();
 				isHighlighted = true;
 			} 
-			while(isHighlighted){
-				System.out.println("Something different!");
-				for (BoardCell c: board.getTargets()) {
-					if ( c == board.getClicked()){
-						current_player.setCurrentCell(c);
-						board.repaint();
+			
+			board.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					for (BoardCell cell : board.getTargets()) {
+						if (cell.containsClick(arg0.getX(),	arg0.getY())){
+							//clicked_cell = cell;
+							current_player.setCurrentCell(cell);
+							System.out.println(cell);
+							
+							for (BoardCell c : board.getTargets() ) {
+								c.revertHighlighted();
+								board.repaint();
+								//isHighlighted = false;
+							}
 
-						break;
+							control_panel.setButtonEnabled();
+						} else {
+							System.out.println(" ERROR ERROR ERROR!");
+						}
 					}
 				}
-			}
-			for (BoardCell c : board.getTargets() ) {
-				c.revertHighlighted();
-				board.repaint();
-				isHighlighted = false;
-			}
 
-			control_panel.setButtonEnabled();
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+	
+			});
+
 		}
 
 		players.add(current_player);
