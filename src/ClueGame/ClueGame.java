@@ -25,9 +25,11 @@ import javax.swing.JOptionPane;
 
 import board.Board;
 import board.BoardCell;
+import board.RoomCell;
 import player.ComputerPlayer;
 import player.HumanPlayer;
 import player.Player;
+import player.Suggestion;
 import card.Card;
 import card.Card.CardType;
 
@@ -45,8 +47,10 @@ public class ClueGame extends JFrame {
 	private Notes notes;
 	private Player human_player;
 	private Splash splash;
+	private Splash warning;
 	private ControlPanel control_panel;
 	private boolean isHighlighted;
+	private boolean clicking;
 
 	JButton button;
 
@@ -84,6 +88,8 @@ public class ClueGame extends JFrame {
 		add(new CardsPanel(human_player), BorderLayout.EAST);
 
 		splash = new Splash(human_player);
+		
+		warning = new Splash(human_player);
 	}
 
 	private JMenu createFileMenu() {
@@ -339,9 +345,26 @@ public class ClueGame extends JFrame {
 		//System.out.println("Targets: " + board.getTargets());
 
 		if (current_player instanceof ComputerPlayer){
+			
+			control_panel.setDisabled();
+			
 			ComputerPlayer temp = (ComputerPlayer) current_player;
 			temp.pickLocation(board.getTargets());
 			board.repaint();
+			
+			if(temp.getCurrentCell().isRoom()){
+				System.out.println("Making a suggestion.");
+				RoomCell c = (RoomCell) temp.getCurrentCell();
+				Suggestion s = temp.createSuggestion(c.getRoomName());
+			
+				System.out.println(s);
+				for ( Player p : players) {
+					p.disproveSuggestion(s.getPerson(), s.getWeapon(), s.getRoom());
+				}
+			}
+			
+			control_panel.setButtonEnabled();
+			
 		} else {
 			
 			System.out.println("Human...");
@@ -357,11 +380,12 @@ public class ClueGame extends JFrame {
 				
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
+					
 					for (BoardCell cell : board.getTargets()) {
 						if (cell.containsClick(arg0.getX(),	arg0.getY())){
 							//clicked_cell = cell;
+							clicking = true;
 							current_player.setCurrentCell(cell);
-							System.out.println(cell);
 							
 							for (BoardCell c : board.getTargets() ) {
 								c.revertHighlighted();
@@ -370,8 +394,10 @@ public class ClueGame extends JFrame {
 							}
 
 							control_panel.setButtonEnabled();
-						} else {
-							System.out.println(" ERROR ERROR ERROR!");
+							warning.setVisible(false);
+							
+						} else if (!clicking) {
+							System.out.println("ERROR ERROR ERROR, CANT MOVE THERE!");
 						}
 					}
 				}

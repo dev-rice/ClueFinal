@@ -47,7 +47,6 @@ public class Board extends JPanel implements MouseListener {
 		current_players = new ArrayList<Player>();
 		
 		loadConfigFiles();
-		//addMouseListener(this);
 	}
 
 	@Override
@@ -245,6 +244,7 @@ public class Board extends JPanel implements MouseListener {
 			while(in.hasNextLine()){
 				String line = in.nextLine();
 				String[] parts = line.split(",");
+				
 				if(numColumns == 0) {
 					numColumns = parts.length;
 				}
@@ -259,7 +259,8 @@ public class Board extends JPanel implements MouseListener {
 						WalkwayCell wc = new WalkwayCell(numRows, i);
 						cells.add(wc);
 					} else {
-						RoomCell rc = new RoomCell(numRows, i, parts[i]);
+						String name = rooms.get(parts[i].charAt(0));
+						RoomCell rc = new RoomCell(numRows, i, parts[i], name);
 						cells.add(rc);
 					}
 				}
@@ -311,7 +312,7 @@ public class Board extends JPanel implements MouseListener {
 				clicked_cell = cell;
 			}
 		}
-		System.out.println(clicked_cell);
+		//System.out.println(clicked_cell);
 	}
 	
 	public BoardCell getClicked() {

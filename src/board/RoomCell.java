@@ -14,14 +14,16 @@ public class RoomCell extends BoardCell {
 	private DoorDirection doorDirection;
 	private char character;
 	private String room;
+	private String room_name;
 	
 	private static BufferedImage floor;
 	private static BufferedImage door;
 
-	public RoomCell(int row, int column, String room) {
+	public RoomCell(int row, int column, String room, String room_name) {
 		this.row = row;
 		this.column = column;
 		this.room = room;
+		this.room_name = room_name;
 		character = room.charAt(0);
 		if (room.length() == 1) {
 			doorDirection = DoorDirection.NONE;
@@ -44,6 +46,42 @@ public class RoomCell extends BoardCell {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		/*switch(character) {
+			case 'C':
+				room_name = "Conservatory";
+				break;
+			case 'B':
+				room_name = "Ballroom";
+				break;
+			case 'K':
+				room_name = "Kitchen";
+				break;
+			case 'T':
+				room_name = "Bathroom";
+				break;
+			case 'Y':
+				room_name = "Bowling Alley";
+				break;
+			case 'P':
+				
+				break;
+			case 'G':
+				
+				break;
+			case 'A':
+				
+				break;
+			case 'X':
+				
+				break;
+			case 'W':
+				
+				break;
+			case 'L':
+				
+				break;
+		}*/
 		
 	}
 
@@ -96,6 +134,10 @@ public class RoomCell extends BoardCell {
 
 	public String getRoom() {
 		return room;
+	}
+	
+	public String getRoomName(){
+		return room_name;
 	}
 
 	@Override

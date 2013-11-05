@@ -32,4 +32,16 @@ public class Suggestion {
 
         return room.equals(suggestion.room) && weapon.equals(suggestion.weapon) && person.equals(suggestion.person);                
     }
+	
+	public String getRoom() {
+		return room.name;
+	}
+	
+	public String getWeapon() {
+		return weapon.name;
+	}
+	
+	public String getPerson() {
+		return person.name;
+	}
 }
