@@ -298,17 +298,24 @@ public class ClueGame extends JFrame {
 		current_player = players.getFirst();
 
 		button = control_panel.getNextPlayerButton();
-
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				takeTurn();
+				//next_turn = true;
+				System.out.println("Setting the next_turn to true.");
+				//nextPlayerButton.setEnabled(false);
+			}
+		});
 		
-		for (int i = 0; i < 100; ++i){
-			takeTurn();
-		}
+		
+		takeTurn();
 
 	}
 
 	public void takeTurn(){
 
-		button.setEnabled(false);
+		control_panel.setDisabled();
 
 		//System.out.println(players);
 
@@ -349,7 +356,6 @@ public class ClueGame extends JFrame {
 		}*/
 
 		players.add(current_player);
-		button.setEnabled(true);
 
 	}
 

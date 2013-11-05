@@ -85,6 +85,10 @@ public class ControlPanel extends JPanel {
 		return nextPlayerButton;
 	}
 
+	public void setDisabled(){
+		nextPlayerButton.setEnabled(false);
+	}
+	
 	public JPanel buttonPanel(){
 		nextPlayerButton = new JButton("Next Player");
 		JButton accusationButton = new JButton("Make an Accusation");
@@ -145,21 +149,7 @@ public class ControlPanel extends JPanel {
 		panel.add(panel3);
 		return panel;
 	}
-
-	private class nextPlayerListener implements ActionListener{
-
-		public void actionPerformed(ActionEvent arg0) {
-			int ready = JOptionPane.showConfirmDialog(null, 
-					"Are you ready to continue?");
-			if (ready == JOptionPane.YES_OPTION){
-				//JOptionPane.showMessageDialog(null, "Here we go!");
-			}else{
-				//JOptionPane.showMessageDialog(null, "OK, we'll wait");
-			}
-		}
-
-
-	}
+	
 	private class accusationListener implements ActionListener{
 
 		public void actionPerformed(ActionEvent arg0) {

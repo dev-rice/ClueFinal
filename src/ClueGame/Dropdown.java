@@ -17,7 +17,7 @@ public class Dropdown extends JPanel {
 		super();
 		setBorder(new TitledBorder (new EtchedBorder(), label));
 		
-		JComboBox<String> combo_box = new JComboBox<String>();
+		JComboBox combo_box = new JComboBox();
 		
 		for (Card card : cards){
 			combo_box.addItem(card.getName());
