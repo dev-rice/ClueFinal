@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ClueGame.ClueGame;
 import board.BadConfigFormatException;
 import board.Board;
 import board.BoardCell;
@@ -27,7 +28,7 @@ public class CR_BoardInitTests {
 	
 	@BeforeClass
 	public static void setUp() {
-		board = new Board("ClueLayout.csv", "ClueLegend.txt");
+		board = new Board("ClueLayout.csv", "ClueLegend.txt", new ClueGame("deck.txt"));
 		board.loadConfigFiles();
 	}
 	@Test
@@ -123,7 +124,7 @@ public class CR_BoardInitTests {
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadColumns() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file names
-		Board b = new Board("ClueLayoutBadColumns.csv", "ClueLegend.txt");
+		Board b = new Board("ClueLayoutBadColumns.csv", "ClueLegend.txt", new ClueGame("deck.txt"));
 		// You may change these calls if needed to match your function names
 		// My loadConfigFiles has a try/catch, so I can't call it directly to
 		// see test throwing the BadConfigFormatException
@@ -134,7 +135,7 @@ public class CR_BoardInitTests {
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
-		Board b = new Board("ClueLayoutBadRoom.csv", "ClueLegend.txt");
+		Board b = new Board("ClueLayoutBadRoom.csv", "ClueLegend.txt", new ClueGame("deck.txt"));
 		b.loadRoomConfig();
 		b.loadBoardConfig();
 	}
@@ -142,7 +143,7 @@ public class CR_BoardInitTests {
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
-		Board b = new Board("ClueLayout.csv", "ClueLegendBadFormat.txt");
+		Board b = new Board("ClueLayout.csv", "ClueLegendBadFormat.txt", new ClueGame("deck.txt"));
 		b.loadRoomConfig();
 		b.loadBoardConfig();
 	}

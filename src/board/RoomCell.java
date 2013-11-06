@@ -47,42 +47,6 @@ public class RoomCell extends BoardCell {
 			e.printStackTrace();
 		}
 		
-		/*switch(character) {
-			case 'C':
-				room_name = "Conservatory";
-				break;
-			case 'B':
-				room_name = "Ballroom";
-				break;
-			case 'K':
-				room_name = "Kitchen";
-				break;
-			case 'T':
-				room_name = "Bathroom";
-				break;
-			case 'Y':
-				room_name = "Bowling Alley";
-				break;
-			case 'P':
-				
-				break;
-			case 'G':
-				
-				break;
-			case 'A':
-				
-				break;
-			case 'X':
-				
-				break;
-			case 'W':
-				
-				break;
-			case 'L':
-				
-				break;
-		}*/
-		
 	}
 
 	@Override
@@ -103,10 +67,6 @@ public class RoomCell extends BoardCell {
 		} else {
 			g.drawImage(floor, column*size, row*size, null);
 		}
-		 
-		
-//		g.setColor(new Color(200,160,0));
-//		g.drawRect(column*size, row*size, size, size);
 		
 	}
 	
@@ -143,7 +103,7 @@ public class RoomCell extends BoardCell {
 	@Override
 	public String toString() {
 		return "RoomCell [doorDirection=" + doorDirection + ", character="
-				+ character + ", room=" + room + ", row=" + row + ", column="
+				+ character + ", room=" + room_name + ", row=" + row + ", column="
 				+ column + "]";
 	}
 

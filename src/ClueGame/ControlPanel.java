@@ -31,14 +31,27 @@ public class ControlPanel extends JPanel {
 	JTextField guess;
 	JTextField result;
 	
-	ControlPanel(){
+	ClueGame clue_game;
+	
+	ControlPanel(ClueGame game){
 		super();
 		setSize(600, 300);
-
+		
+		clue_game = game;
 
 		add(turnPanel());
 		add(buttonPanel(), BorderLayout.CENTER);
 		add(otherPanel(), BorderLayout.SOUTH);
+		
+		nextPlayerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				clue_game.takeTurn();
+				//next_turn = true;
+				System.out.println("Setting the next_turn to true.");
+				//nextPlayerButton.setEnabled(false);
+			}
+		});
 	}
 
 	public void setTurn(String name){

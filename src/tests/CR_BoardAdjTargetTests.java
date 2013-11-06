@@ -1,13 +1,13 @@
 package tests;
 
 import java.util.LinkedList;
-
 import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ClueGame.ClueGame;
 import board.BadConfigFormatException;
 import board.Board;
 import board.BoardCell;
@@ -17,7 +17,7 @@ public class CR_BoardAdjTargetTests {
 	private static Board board;
 	@BeforeClass
 	public static void setUp() {
-		board = new Board("ClueLayout.csv","ClueLegend.txt");
+		board = new Board("ClueLayout.csv","ClueLegend.txt", new ClueGame("deck.txt"));
 		board.loadConfigFiles();
 		board.calcAdjacencies();
 

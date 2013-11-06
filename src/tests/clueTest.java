@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ClueGame.ClueGame;
 import board.BadConfigFormatException;
 import board.Board;
 import board.BoardCell;
@@ -21,7 +22,7 @@ public class clueTest {
 
 	@Before
 	public void setUp() {
-		board = new Board("Layout.csv", "Legend.csv");
+		board = new Board("Layout.csv", "Legend.csv", new ClueGame("deck.txt"));
 		board.loadConfigFiles();
 	}
 
@@ -100,19 +101,19 @@ public class clueTest {
 
 	@Test (expected = BadConfigFormatException.class)
 	public void testColumnException() throws BadConfigFormatException, FileNotFoundException {
-		Board b = new Board("BadColumns.csv", "Legend.csv");
+		Board b = new Board("BadColumns.csv", "Legend.csv", new ClueGame("deck.txt"));
 		b.loadRoomConfig();
 		b.loadBoardConfig();
 	}
 	@Test (expected = BadConfigFormatException.class)
 	public void testRoomException() throws BadConfigFormatException, FileNotFoundException {
-		Board b = new Board("BadRoom.csv", "Legend.scv");
+		Board b = new Board("BadRoom.csv", "Legend.scv", new ClueGame("deck.txt"));
 		b.loadRoomConfig();
 		b.loadBoardConfig();
 	}
 	@Test (expected = BadConfigFormatException.class)
 	public void testRoomFormatException() throws BadConfigFormatException, FileNotFoundException {
-		Board b = new Board("Layout.csv", "BadLegend.txt");
+		Board b = new Board("Layout.csv", "BadLegend.txt", new ClueGame("deck.txt"));
 		b.loadRoomConfig();
 		b.loadBoardConfig();
 	}

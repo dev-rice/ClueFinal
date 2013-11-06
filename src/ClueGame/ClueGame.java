@@ -50,7 +50,7 @@ public class ClueGame extends JFrame {
 	private Splash warning;
 	private ControlPanel control_panel;
 	private boolean isHighlighted;
-	private boolean clicking;
+	private boolean is_human_turn;
 
 	private JButton button;
 	private PromptDialog suggestion;
@@ -63,7 +63,7 @@ public class ClueGame extends JFrame {
 		// automated, or should it be called by the creating
 		// class?
 		DECK_FILE = deck;
-		board = new Board("Layout.csv", "Legend.csv");
+		board = new Board("Layout.csv", "Legend.csv", this);
 		players = loadPeople();
 		deal();
 
@@ -81,7 +81,7 @@ public class ClueGame extends JFrame {
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
 
-		control_panel = new ControlPanel();
+		control_panel = new ControlPanel(this);
 		add(control_panel, BorderLayout.SOUTH);
 
 		for (Player player : players) {
@@ -95,7 +95,7 @@ public class ClueGame extends JFrame {
 
 		warning = new Splash(human_player);
 
-		suggestion = new PromptDialog(loadDeck());
+		suggestion = new PromptDialog(this);
 	}
 
 	private JMenu createFileMenu() {
@@ -191,6 +191,10 @@ public class ClueGame extends JFrame {
 		soln = new Solution(person, weapon, room);
 	}
 
+	public Player getCurrent_player() {
+		return current_player;
+	}
+
 	private void deal(){
 		// Process deck
 		Stack deck = loadDeck();
@@ -258,7 +262,7 @@ public class ClueGame extends JFrame {
 		return people;
 	}
 
-	private Stack<Card> loadDeck() {
+	public Stack<Card> loadDeck() {
 		// Reads in Deck's data, adds it to deck, returns deck.
 		List<Card> tempList = new ArrayList();
 		Stack<Card> deck = new Stack();
@@ -277,7 +281,7 @@ public class ClueGame extends JFrame {
 				} else if ( buffer.equals("*ROOM")){
 					type = CardType.ROOM;
 					// Else, create card and add to list
-				} else {
+				} else if (!buffer.contains("Walkway")) {
 					tempList.add(new Card(buffer, type));
 				}
 			}
@@ -310,21 +314,9 @@ public class ClueGame extends JFrame {
 			players.add(temp);
 			temp = players.getFirst();
 		}
-		current_player = players.getFirst();
-
-		button = control_panel.getNextPlayerButton();
-
+		//current_player = players.getFirst();
+		
 		takeTurn();
-
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				takeTurn();
-				//next_turn = true;
-				System.out.println("Setting the next_turn to true.");
-				//nextPlayerButton.setEnabled(false);
-			}
-		});
 
 	}
 
@@ -370,9 +362,10 @@ public class ClueGame extends JFrame {
 			}
 
 			control_panel.setButtonEnabled();
+			players.add(current_player);
 
 		} else {
-
+			is_human_turn = true;
 			System.out.println("Human...");
 			control_panel.setDisabled();
 
@@ -381,89 +374,17 @@ public class ClueGame extends JFrame {
 				board.repaint();
 				isHighlighted = true;
 			} 
-
-			board.addMouseListener(new MouseListener() {
-
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-
-					for (BoardCell cell : board.getTargets()) {
-						if (cell.containsClick(arg0.getX(),	arg0.getY())){
-							//clicked_cell = cell;
-							clicking = true;
-							current_player.setCurrentCell(cell);
-
-							for (BoardCell c : board.getTargets() ) {
-								c.revertHighlighted();
-								board.repaint();
-								//isHighlighted = false;
-							}
-
-							if (current_player.getCurrentCell().isRoom()){
-					
-								RoomCell room = (RoomCell) current_player.getCurrentCell();
-								suggestion.setRoom(room);
-								
-								suggestion.setVisible(true);
-								
-								System.out.println("this is visible");
-								submit = suggestion.getSubmitButton();
-								submit.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e)
-									{
-										System.out.println("you clicked submit");
-										for ( Player p : players) {
-											p.disproveSuggestion(suggestion.getPerson(), suggestion.getWeapon(), suggestion.getRoom());
-										}
-										suggestion.setVisible(false);
-									}
-								});
-								
-
-							}
-
-							control_panel.setButtonEnabled();
-
-
-						} else if (!clicking) {
-							System.out.println("ERROR ERROR ERROR, CANT MOVE THERE!");
-						}
-					}
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-
-			});
-
+	
 		}
 
-		players.add(current_player);
-
+	}
+	public void endHumanTurn(){
+		is_human_turn = false;
 	}
 
+	public ControlPanel getControl_panel() {
+		return control_panel;
+	}
 
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame("deck.txt");

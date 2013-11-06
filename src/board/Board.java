@@ -17,9 +17,12 @@ import java.util.Scanner;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import player.HumanPlayer;
 import player.Player;
+import ClueGame.ClueGame;
 import board.RoomCell.DoorDirection;
 
 public class Board extends JPanel implements MouseListener {
@@ -33,10 +36,12 @@ public class Board extends JPanel implements MouseListener {
 	private ArrayList<Player> current_players;
 	private BoardCell clicked_cell = null;
 	private boolean onBoard;
+	private ClueGame clue_game;
 
-	public Board(String layout, String legend) {
+	public Board(String layout, String legend, ClueGame game) {
 		this.layout = layout;
 		this.legend = legend;
+		clue_game = game;
 		rooms = new HashMap<Character,String>();
 		cells = new ArrayList<BoardCell>();
 		adjacencies = new HashMap<Integer, LinkedList<Integer>>();
@@ -45,18 +50,20 @@ public class Board extends JPanel implements MouseListener {
 		targets = new HashSet<BoardCell>();
 		visited = new boolean[numRows*numColumns];
 		current_players = new ArrayList<Player>();
-		
+
 		loadConfigFiles();
+
+		addMouseListener(this);
 	}
 
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
-		
+
 		for (BoardCell cell : cells){
 			cell.draw(g);
 		}
-		
+
 		for (Player player : current_players){
 			player.draw(g);
 		}
@@ -74,65 +81,65 @@ public class Board extends JPanel implements MouseListener {
 		g.drawString("Garage", 20*size, 2*size);
 		g.drawString("Aquarium", 10*size, 2*size);
 		g.drawString("Stairs", 13*size, 11*size);
-		
+
 	}
-	
+
 	public void updatePlayers(ArrayDeque<Player> players) {
 		for (Player player : players) {
 			current_players.add(player);
 		}
 	}
-	
+
 	public void calcAdjacencies(){
 		for (int i = 0; i < numRows*numColumns;i++){
 			adjacencies.put(i, getAdjacencies(i));
 		}
 	}
 
-	
-	 public void startTargets(int row, int column, int numSteps){
-         Arrays.fill(visited,false);//added for initialization
-         targets.clear();
-         
-         targets.add(getCellAt(calcIndex(row,column)));
-         calcTargets(row, column, numSteps);
-         targets.remove(getCellAt(calcIndex(row,column)));
- }
-	
-	
-	 public void calcTargets(int row, int column, int numSteps) {
-         int index = calcIndex(row, column);
-         LinkedList<Integer> tempList = getAdjacencies(index);
-         //System.out.println(tempList);
-         //System.out.println("Index: " + index + " with steps left: " + numSteps);
-         if( numSteps > 0 ){
-                 visited[index] = true;
-                 for(int i = 0; i < tempList.size(); ++i){
-                         BoardCell temp_cell = getCellAt(tempList.get(i));
-                         //System.out.println("Trying " + temp_cell + ", index: " 
-                                         //+ calcIndex(temp_cell.getRow(), temp_cell.getColumn()));
 
-                         if (temp_cell.isDoorWay()){
-                                 //System.out.println("I found a doorway!");
-                                 targets.add(temp_cell);
-                         } else if (! visited[tempList.get(i)]){
-                                 calcTargets(temp_cell.getRow(), temp_cell.getColumn(), numSteps-1);
-                         }
-                 }        
-         } else {
-                 if( !targets.contains(index) && !visited[index] ){
-                         //System.out.println("Added " + index);
-                         targets.add(getCellAt(index));
-                 }
-                 return;
-         }
-         visited[index] = false;
- }
-	
+	public void startTargets(int row, int column, int numSteps){
+		Arrays.fill(visited,false);//added for initialization
+		targets.clear();
+
+		targets.add(getCellAt(calcIndex(row,column)));
+		calcTargets(row, column, numSteps);
+		targets.remove(getCellAt(calcIndex(row,column)));
+	}
+
+
+	public void calcTargets(int row, int column, int numSteps) {
+		int index = calcIndex(row, column);
+		LinkedList<Integer> tempList = getAdjacencies(index);
+		//System.out.println(tempList);
+		//System.out.println("Index: " + index + " with steps left: " + numSteps);
+		if( numSteps > 0 ){
+			visited[index] = true;
+			for(int i = 0; i < tempList.size(); ++i){
+				BoardCell temp_cell = getCellAt(tempList.get(i));
+				//System.out.println("Trying " + temp_cell + ", index: " 
+				//+ calcIndex(temp_cell.getRow(), temp_cell.getColumn()));
+
+				if (temp_cell.isDoorWay()){
+					//System.out.println("I found a doorway!");
+					targets.add(temp_cell);
+				} else if (! visited[tempList.get(i)]){
+					calcTargets(temp_cell.getRow(), temp_cell.getColumn(), numSteps-1);
+				}
+			}        
+		} else {
+			if( !targets.contains(index) && !visited[index] ){
+				//System.out.println("Added " + index);
+				targets.add(getCellAt(index));
+			}
+			return;
+		}
+		visited[index] = false;
+	}
+
 	public Set<BoardCell> getTargets(){
 		return targets;
 	}
-	
+
 	public LinkedList<Integer> getAdjacencies(int index){
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		int cellX = 0, cellY = 0;
@@ -142,13 +149,13 @@ public class Board extends JPanel implements MouseListener {
 		} catch ( ArithmeticException e) {
 			System.out.println("Error: Encountered a divide by zero error.");
 		}
-		
+
 		if (getCellAt(calcIndex(cellY,cellX)).isRoom()){
 			if (!getCellAt(calcIndex(cellY,cellX)).isDoorWay()){
 				return list;
 			}
 		}
-		
+
 		if (getCellAt(calcIndex(cellY,cellX)).isDoorWay()){
 			if (getRoomCellAt(cellY,cellX).getDoorDirection() == DoorDirection.UP){
 				list.push(calcIndex(cellY-1,cellX));
@@ -164,7 +171,7 @@ public class Board extends JPanel implements MouseListener {
 			}
 			return list;
 		}
-		
+
 		if (calcIndex(cellY,cellX-1) != -1){
 			if (getCellAt(calcIndex(cellY,cellX-1)).isWalkway()){	//Push target always if is walkway
 				list.push(calcIndex(cellY,cellX-1));
@@ -244,7 +251,7 @@ public class Board extends JPanel implements MouseListener {
 			while(in.hasNextLine()){
 				String line = in.nextLine();
 				String[] parts = line.split(",");
-				
+
 				if(numColumns == 0) {
 					numColumns = parts.length;
 				}
@@ -307,47 +314,75 @@ public class Board extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		/*System.out.println("You clicked somewhere");
 		for (BoardCell cell : cells) {
 			if (cell.containsClick(arg0.getX(),	arg0.getY())){
 				clicked_cell = cell;
 			}
+		}*/
+		System.out.println(clicked_cell);
+		//JOptionPane.showMessageDialog (null, clicked_cell);
+
+		if (clue_game.getCurrent_player() instanceof HumanPlayer){
+			for (BoardCell cell : getTargets()) {
+				if (cell.containsClick(arg0.getX(),	arg0.getY())){
+					
+					System.out.println("Moving you to " + cell);
+					clue_game.getCurrent_player().setCurrentCell(cell);
+
+					for (BoardCell c : getTargets() ) {
+						c.revertHighlighted();
+						repaint();
+						//isHighlighted = false;
+					}
+
+					if (clue_game.getCurrent_player().getCurrentCell().isRoom()){
+
+						RoomCell room = (RoomCell) clue_game.getCurrent_player().getCurrentCell();
+						//suggestion.setRoom(room);
+
+						//suggestion.setVisible(true);
+
+					}
+
+					
+					clue_game.endHumanTurn();
+					clue_game.getControl_panel().setButtonEnabled();
+					clue_game.getPlayers().add(clue_game.getCurrent_player());
+					System.out.println("MouseListener out!");
+					
+
+				} else  {
+					System.out.println("Can't move there!");
+					//JOptionPane.showMessageDialog (null, "Can't move there!");
+				}
+			}
 		}
-		//System.out.println(clicked_cell);
-	}
-	
-	public BoardCell getClicked() {
-		return clicked_cell;
-	}
-	
-	public void setClickedtoNull() {
-		clicked_cell = null;
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		onBoard = true;
-	}
 	
-	public boolean getOnBoard() {
-		return onBoard;
 	}
+
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

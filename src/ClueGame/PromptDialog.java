@@ -1,6 +1,8 @@
 package ClueGame;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -9,8 +11,8 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
+import player.Player;
 import board.RoomCell;
-
 import card.Card;
 
 public class PromptDialog extends JDialog  {
@@ -21,11 +23,15 @@ public class PromptDialog extends JDialog  {
 	private JButton submit;
 	private JButton cancel;
 
-	public PromptDialog(Stack<Card> deck) {
+	private ClueGame clue_game;
+	
+	public PromptDialog(ClueGame game) {
 		// TODO Auto-generated constructor stub
 		setSize(300,300);
 		setLayout(new GridLayout(4,2));
 
+		clue_game = game;
+		
 		people = new JComboBox();
 		rooms = new JComboBox();
 		weapons = new JComboBox();
@@ -33,8 +39,8 @@ public class PromptDialog extends JDialog  {
 		submit = new JButton("Submit");
 		cancel = new JButton("Cancel");
 
-
-
+		Stack<Card> deck = clue_game.loadDeck();
+		
 		while(!deck.isEmpty()){
 			Card card = deck.pop();
 
@@ -57,6 +63,17 @@ public class PromptDialog extends JDialog  {
 		add(weapons);
 		add(submit);
 		add(cancel);
+		
+		submit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				System.out.println("you clicked submit");
+				for ( Player p : clue_game.getPlayers()) {
+					p.disproveSuggestion(getPerson(), getWeapon(), getRoom());
+				}
+				setVisible(false);
+			}
+		});
 
 
 	}

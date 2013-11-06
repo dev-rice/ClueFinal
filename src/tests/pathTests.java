@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.Test;
 
+import ClueGame.ClueGame;
 import board.Board;
 import board.BoardCell;
 
@@ -21,7 +22,7 @@ public class pathTests {
 	
 	@BeforeClass
 	public static void setUp() {
-		board = new Board("Layout.csv", "Legend.csv");
+		board = new Board("Layout.csv", "Legend.csv", new ClueGame("deck.txt"));
 		board.loadConfigFiles();
 		board.calcAdjacencies();
 	}
@@ -42,7 +43,7 @@ public class pathTests {
 			//Walkway against room cell - bottom edge
 			testList = board.getAdjacencies(board.calcIndex(25,17));
 			Assert.assertTrue(testList.contains(board.calcIndex(24,17)));
-			Assert.assertEquals(3, testList.size());
+			Assert.assertEquals(2, testList.size());
 			
 			//left edge only path to right.squished between rooms
 			testList = board.getAdjacencies(board.calcIndex(5,0));
