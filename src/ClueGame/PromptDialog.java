@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
+import player.ComputerPlayer;
 import player.Player;
 import player.Suggestion;
 import board.RoomCell;
@@ -70,19 +71,9 @@ public class PromptDialog extends JDialog  {
 			{
 				System.out.println("you clicked submit");
 				
-				Card disprove_card = null;
-				
-				for ( Player p : clue_game.getPlayers()) {
-					disprove_card = p.disproveSuggestion(getPerson().getName(), getWeapon().getName(), getRoom().getName());
-				}
 				Suggestion s = new Suggestion(getPerson(), getWeapon(), getRoom());
-				clue_game.getControl_panel().setGuess(s.toString());
 				
-				if (disprove_card != null) {
-					clue_game.getControl_panel().setResult(disprove_card.getName());
-				} else {
-					clue_game.getControl_panel().setResult("No new clue");
-				}
+				clue_game.doSuggestions(s);
 				
 				clue_game.endHumanTurn();
 				setVisible(false);
@@ -92,8 +83,9 @@ public class PromptDialog extends JDialog  {
 
 	}
 
-	public void setRoom(RoomCell room){
-		rooms.setSelectedItem(room.getRoomName());
+	public void setRoom(String room){
+		
+		rooms.setSelectedItem(new Card(room, Card.CardType.ROOM));
 		rooms.setEditable(false);
 		rooms.setEnabled(false);
 		cancel.setEnabled(false);

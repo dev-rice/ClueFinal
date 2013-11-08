@@ -228,6 +228,7 @@ public class ClueGame extends JFrame {
 			players.offer(tempPlayer);
 		}
 		soln = new Solution(person, weapon, room);
+		System.out.println(soln);
 	}
 
 	private ArrayDeque<Player> loadPeople(){
@@ -303,7 +304,7 @@ public class ClueGame extends JFrame {
 	}
 
 	public int rollDie(){
-		Random rand = new Random();
+		Random rand = new Random(System.currentTimeMillis());
 		return rand.nextInt(6) + 1;
 	}
 
@@ -354,21 +355,8 @@ public class ClueGame extends JFrame {
 				System.out.println("Making a suggestion.");
 				RoomCell c = (RoomCell) temp.getCurrentCell();
 				Suggestion s = temp.createSuggestion(c.getRoomName());
-				control_panel.setGuess(s.toString());
-				System.out.println(s);
 				
-				Card disprove_card = null;
-				
-				for ( Player p : players) {
-					disprove_card = p.disproveSuggestion(s.getPerson(), s.getWeapon(), s.getRoom());
-					
-				}
-				
-				if (disprove_card != null){
-					control_panel.setResult(disprove_card.getName());
-				} else {
-					control_panel.setResult("No new clue");
-				}
+				doSuggestions(s);
 			}
 
 			control_panel.setButtonEnabled();
@@ -389,8 +377,25 @@ public class ClueGame extends JFrame {
 
 	}
 	
-	public void doSuggestions(){
-		
+	public void doSuggestions(Suggestion s){
+		control_panel.setGuess(s.toString());
+		for (Player player : players) {
+			Card disproving_card = player.disproveSuggestion(s.getPerson(), s.getWeapon(), s.getRoom());
+
+				if (disproving_card != null){
+					for (Player p : players){
+						if (p instanceof ComputerPlayer){
+							((ComputerPlayer) p).updateSeen(disproving_card);
+						}
+					}
+					if (current_player instanceof ComputerPlayer){
+						((ComputerPlayer) current_player).updateSeen(disproving_card);
+					}
+					control_panel.setResult(disproving_card.getName());
+					return;
+				}
+			}
+		control_panel.setResult("No new clue.");
 	}
 	
 	public void endHumanTurn(){

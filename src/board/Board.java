@@ -314,14 +314,6 @@ public class Board extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		/*System.out.println("You clicked somewhere");
-		for (BoardCell cell : cells) {
-			if (cell.containsClick(arg0.getX(),	arg0.getY())){
-				clicked_cell = cell;
-			}
-		}*/
-
-		//JOptionPane.showMessageDialog (null, clicked_cell);
 
 		if (clue_game.getCurrent_player() instanceof HumanPlayer){
 			BoardCell clicked_cell = null;
@@ -334,16 +326,16 @@ public class Board extends JPanel implements MouseListener {
 			if (getTargets().contains(clicked_cell)){
 				System.out.println("You clicked a valid cell!");
 				clue_game.getCurrent_player().setCurrentCell(clicked_cell);
-
+				
 				for (BoardCell c : getTargets() ) {
 					c.revertHighlighted();
 					repaint();
 				}
 
 				if (clue_game.getCurrent_player().getCurrentCell().isRoom()){
-
 					RoomCell room = (RoomCell) clue_game.getCurrent_player().getCurrentCell();
-					clue_game.getSuggestion().setRoom(room);
+					
+					clue_game.getSuggestion().setRoom(room.getRoomName());
 					clue_game.getSuggestion().setVisible(true);
 					//suggestion.setVisible(true);
 
