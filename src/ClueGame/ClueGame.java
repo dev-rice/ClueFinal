@@ -55,7 +55,7 @@ public class ClueGame extends JFrame {
 	private JButton button;
 	private PromptDialog suggestion;
 	private PromptDialog accusation;
-	
+
 	JButton submit;
 
 	public ClueGame(String deck) {
@@ -316,7 +316,7 @@ public class ClueGame extends JFrame {
 			temp = players.getFirst();
 		}
 		//current_player = players.getFirst();
-		
+
 		takeTurn();
 
 	}
@@ -355,8 +355,8 @@ public class ClueGame extends JFrame {
 				System.out.println("Making a suggestion.");
 				RoomCell c = (RoomCell) temp.getCurrentCell();
 				Suggestion s = temp.createSuggestion(c.getRoomName());
-				
-				doSuggestions(s);
+
+				doSuggestions(s, c);
 			}
 
 			control_panel.setButtonEnabled();
@@ -372,32 +372,48 @@ public class ClueGame extends JFrame {
 				board.repaint();
 				isHighlighted = true;
 			} 
-	
+
 		}
 
 	}
+
+	public void doSuggestions(Suggestion s, RoomCell room){
+		if (!current_player.getName().equals(s.getPerson())) {
+			Player accused_player = players.getFirst();
+			for (Player player : players){
+				if (player.getName().equals(s.getPerson())){
+					accused_player = player;
+				}
+			}
+			if (accused_player instanceof ComputerPlayer) {
+				((ComputerPlayer) accused_player).setLastRoomVisited(room.getRoom().charAt(0));
+			}
+			accused_player.setCurrentCell(room);
 	
-	public void doSuggestions(Suggestion s){
+			board.repaint();
+		}
+
 		control_panel.setGuess(s.toString());
 		for (Player player : players) {
 			Card disproving_card = player.disproveSuggestion(s.getPerson(), s.getWeapon(), s.getRoom());
 
-				if (disproving_card != null){
-					for (Player p : players){
-						if (p instanceof ComputerPlayer){
-							((ComputerPlayer) p).updateSeen(disproving_card);
-						}
+			if (disproving_card != null){
+				for (Player p : players){
+					if (p instanceof ComputerPlayer){
+						((ComputerPlayer) p).updateSeen(disproving_card);
 					}
-					if (current_player instanceof ComputerPlayer){
-						((ComputerPlayer) current_player).updateSeen(disproving_card);
-					}
-					control_panel.setResult(disproving_card.getName());
-					return;
 				}
+				if (current_player instanceof ComputerPlayer){
+					((ComputerPlayer) current_player).updateSeen(disproving_card);
+				}
+				control_panel.setResult(disproving_card.getName());
+				return;
 			}
+		}
 		control_panel.setResult("No new clue.");
+		
 	}
-	
+
 	public void endHumanTurn(){
 		is_human_turn = false;
 		control_panel.setButtonEnabled();

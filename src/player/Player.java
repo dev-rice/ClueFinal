@@ -96,6 +96,7 @@ public class Player {
 	public void setCurrentCell(BoardCell target){
 		// Temporary, only for testing
 		currentCell = target;
+		System.out.println("Moved " + name + " to " + target);
 	}
 	
 	public void addCard(Card card){

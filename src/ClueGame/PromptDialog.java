@@ -73,7 +73,7 @@ public class PromptDialog extends JDialog  {
 				
 				Suggestion s = new Suggestion(getPerson(), getWeapon(), getRoom());
 				
-				clue_game.doSuggestions(s);
+				clue_game.doSuggestions(s,(RoomCell)clue_game.getCurrent_player().getCurrentCell());
 				
 				clue_game.endHumanTurn();
 				setVisible(false);
