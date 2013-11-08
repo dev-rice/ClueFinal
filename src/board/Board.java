@@ -320,52 +320,48 @@ public class Board extends JPanel implements MouseListener {
 				clicked_cell = cell;
 			}
 		}*/
-		System.out.println(clicked_cell);
+
 		//JOptionPane.showMessageDialog (null, clicked_cell);
 
 		if (clue_game.getCurrent_player() instanceof HumanPlayer){
-			for (BoardCell cell : getTargets()) {
-				if (cell.containsClick(arg0.getX(),	arg0.getY())){
-					
-					System.out.println("Moving you to " + cell);
-					clue_game.getCurrent_player().setCurrentCell(cell);
-
-					for (BoardCell c : getTargets() ) {
-						c.revertHighlighted();
-						repaint();
-						//isHighlighted = false;
-					}
-
-					if (clue_game.getCurrent_player().getCurrentCell().isRoom()){
-
-						RoomCell room = (RoomCell) clue_game.getCurrent_player().getCurrentCell();
-						//suggestion.setRoom(room);
-
-						//suggestion.setVisible(true);
-
-					}
-
-					
-					clue_game.endHumanTurn();
-					clue_game.getControl_panel().setButtonEnabled();
-					clue_game.getPlayers().add(clue_game.getCurrent_player());
-					System.out.println("MouseListener out!");
-					break;
-
-				} else  {
-					System.out.println("Can't move there!");
-					//break;
-					//JOptionPane.showMessageDialog (null, "Can't move there!", "Can't move there!", JOptionPane.ERROR_MESSAGE);
-					break;
+			BoardCell clicked_cell = null;
+			for (BoardCell cell : cells) {
+				if (cell.containsClick(arg0.getX(), arg0.getY())){
+					clicked_cell = cell;
+					System.out.println(clicked_cell);
 				}
 			}
-		}
+			if (getTargets().contains(clicked_cell)){
+				System.out.println("You clicked a valid cell!");
+				clue_game.getCurrent_player().setCurrentCell(clicked_cell);
 
+				for (BoardCell c : getTargets() ) {
+					c.revertHighlighted();
+					repaint();
+				}
+
+				if (clue_game.getCurrent_player().getCurrentCell().isRoom()){
+
+					RoomCell room = (RoomCell) clue_game.getCurrent_player().getCurrentCell();
+					//suggestion.setRoom(room);
+					//suggestion.setVisible(true);
+
+				}
+
+				clue_game.getControl_panel().setButtonEnabled();
+				clue_game.getPlayers().add(clue_game.getCurrent_player());
+				System.out.println("MouseListener out!");
+			} else {
+				System.out.println("You can't move thar!");
+				JOptionPane.showMessageDialog (null, "Can't move there!", "Can't move there!", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
+
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-	
+
 	}
 
 

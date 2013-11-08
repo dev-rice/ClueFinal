@@ -15,8 +15,10 @@ public abstract class BoardCell {
 	
 	public boolean containsClick(int x, int y) {
 		//System.out.println("X: "  + x + " Y: " + y);
-		return (x >= column * TILE_SIZE) && (x <= (column * TILE_SIZE) + TILE_SIZE)
+		boolean contains =  (x >= column * TILE_SIZE) && (x <= (column * TILE_SIZE) + TILE_SIZE)
 				&& (y >= row * TILE_SIZE) && ( y <= (row * TILE_SIZE) + TILE_SIZE);
+		//System.out.println(contains);
+		return contains;
 	}
 	
 	public boolean isWalkway(){
