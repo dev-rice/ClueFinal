@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import player.Player;
+import player.Suggestion;
 import board.RoomCell;
 import card.Card;
 
@@ -45,11 +46,11 @@ public class PromptDialog extends JDialog  {
 			Card card = deck.pop();
 
 			if (card.getType() == Card.CardType.PERSON){
-				people.addItem(card.getName());
+				people.addItem(card);
 			} else if (card.getType() == Card.CardType.WEAPON) {
-				weapons.addItem(card.getName());
+				weapons.addItem(card);
 			} else if (card.getType() == Card.CardType.ROOM && !card.getName().equals("Walkway")) {
-				rooms.addItem(card.getName());
+				rooms.addItem(card);
 			}
 
 		}
@@ -68,9 +69,22 @@ public class PromptDialog extends JDialog  {
 			public void actionPerformed(ActionEvent e)
 			{
 				System.out.println("you clicked submit");
+				
+				Card disprove_card = null;
+				
 				for ( Player p : clue_game.getPlayers()) {
-					p.disproveSuggestion(getPerson(), getWeapon(), getRoom());
+					disprove_card = p.disproveSuggestion(getPerson().getName(), getWeapon().getName(), getRoom().getName());
 				}
+				Suggestion s = new Suggestion(getPerson(), getWeapon(), getRoom());
+				clue_game.getControl_panel().setGuess(s.toString());
+				
+				if (disprove_card != null) {
+					clue_game.getControl_panel().setResult(disprove_card.getName());
+				} else {
+					clue_game.getControl_panel().setResult("No new clue");
+				}
+				
+				clue_game.endHumanTurn();
 				setVisible(false);
 			}
 		});
@@ -89,16 +103,16 @@ public class PromptDialog extends JDialog  {
 		return submit;
 	}
 
-	public String getRoom(){
+	public Card getRoom(){
 
-		return (String) rooms.getSelectedItem();
+		return (Card) rooms.getSelectedItem();
 	}
-	public String getPerson(){
+	public Card getPerson(){
 
-		return (String) people.getSelectedItem();
+		return (Card) people.getSelectedItem();
 	}
-	public String getWeapon(){
+	public Card getWeapon(){
 
-		return (String) weapons.getSelectedItem();
+		return (Card) weapons.getSelectedItem();
 	}
 }

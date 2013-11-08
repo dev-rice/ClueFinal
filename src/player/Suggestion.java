@@ -15,8 +15,7 @@ public class Suggestion {
 
 	@Override
 	public String toString() {
-		return "Suggestion room=" + room + ", weapon=" + weapon + ", person="
-				+ person;
+		return room.getName() + ", " + weapon.getName() + ", " + person.getName();
 	}
 	
 	@Override

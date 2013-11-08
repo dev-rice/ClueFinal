@@ -343,12 +343,15 @@ public class Board extends JPanel implements MouseListener {
 				if (clue_game.getCurrent_player().getCurrentCell().isRoom()){
 
 					RoomCell room = (RoomCell) clue_game.getCurrent_player().getCurrentCell();
-					//suggestion.setRoom(room);
+					clue_game.getSuggestion().setRoom(room);
+					clue_game.getSuggestion().setVisible(true);
 					//suggestion.setVisible(true);
 
+				} else {
+					clue_game.endHumanTurn();
 				}
 
-				clue_game.getControl_panel().setButtonEnabled();
+				//clue_game.getControl_panel().setButtonEnabled();
 				clue_game.getPlayers().add(clue_game.getCurrent_player());
 				System.out.println("MouseListener out!");
 			} else {

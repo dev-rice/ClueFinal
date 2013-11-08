@@ -354,10 +354,20 @@ public class ClueGame extends JFrame {
 				System.out.println("Making a suggestion.");
 				RoomCell c = (RoomCell) temp.getCurrentCell();
 				Suggestion s = temp.createSuggestion(c.getRoomName());
-
+				control_panel.setGuess(s.toString());
 				System.out.println(s);
+				
+				Card disprove_card = null;
+				
 				for ( Player p : players) {
-					p.disproveSuggestion(s.getPerson(), s.getWeapon(), s.getRoom());
+					disprove_card = p.disproveSuggestion(s.getPerson(), s.getWeapon(), s.getRoom());
+					
+				}
+				
+				if (disprove_card != null){
+					control_panel.setResult(disprove_card.getName());
+				} else {
+					control_panel.setResult("No new clue");
 				}
 			}
 
@@ -378,8 +388,18 @@ public class ClueGame extends JFrame {
 		}
 
 	}
+	
+	public void doSuggestions(){
+		
+	}
+	
 	public void endHumanTurn(){
 		is_human_turn = false;
+		control_panel.setButtonEnabled();
+	}
+
+	public PromptDialog getSuggestion() {
+		return suggestion;
 	}
 
 	public ControlPanel getControl_panel() {
