@@ -350,11 +350,13 @@ public class Board extends JPanel implements MouseListener {
 					clue_game.getControl_panel().setButtonEnabled();
 					clue_game.getPlayers().add(clue_game.getCurrent_player());
 					System.out.println("MouseListener out!");
-					
+					break;
 
 				} else  {
 					System.out.println("Can't move there!");
-					//JOptionPane.showMessageDialog (null, "Can't move there!");
+					//break;
+					//JOptionPane.showMessageDialog (null, "Can't move there!", "Can't move there!", JOptionPane.ERROR_MESSAGE);
+					break;
 				}
 			}
 		}
