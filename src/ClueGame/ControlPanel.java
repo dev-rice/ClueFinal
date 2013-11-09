@@ -19,13 +19,15 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import board.Board;
+import board.BoardCell;
 
 public class ControlPanel extends JPanel {
 
 	private boolean next_turn = false;
 
 	JButton nextPlayerButton;
-
+	JButton accusationButton;
+	
 	JTextField turn;
 	JTextField dieRoll;
 	JTextField guess;
@@ -108,7 +110,7 @@ public class ControlPanel extends JPanel {
 	
 	public JPanel buttonPanel(){
 		nextPlayerButton = new JButton("Next Player");
-		JButton accusationButton = new JButton("Make an Accusation");
+		accusationButton = new JButton("Make an Accusation");
 
 //		nextPlayerButton.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent e)
@@ -167,10 +169,19 @@ public class ControlPanel extends JPanel {
 		return panel;
 	}
 	
+	public void setAccusationEnabled(boolean b) {
+		accusationButton.setEnabled(b);
+	}
+	
 	private class accusationListener implements ActionListener{
 
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
+			for (BoardCell c : clue_game.getBoard().getTargets() ) {
+				c.revertHighlighted();
+				repaint();
+			}
+			clue_game.getAccusation().setVisible(true);
+			
 
 		}
 

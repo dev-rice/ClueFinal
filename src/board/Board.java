@@ -314,7 +314,7 @@ public class Board extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-
+		clue_game.getControl_panel().setAccusationEnabled(false);
 		if (clue_game.getCurrent_player() instanceof HumanPlayer){
 			BoardCell clicked_cell = null;
 			for (BoardCell cell : cells) {
@@ -334,7 +334,7 @@ public class Board extends JPanel implements MouseListener {
 
 				if (clue_game.getCurrent_player().getCurrentCell().isRoom()){
 					RoomCell room = (RoomCell) clue_game.getCurrent_player().getCurrentCell();
-					
+					clue_game.getSuggestion().setSuggestions(true);
 					clue_game.getSuggestion().setRoom(room.getRoomName());
 					clue_game.getSuggestion().setVisible(true);
 					//suggestion.setVisible(true);

@@ -96,6 +96,8 @@ public class ClueGame extends JFrame {
 		warning = new Splash(human_player);
 
 		suggestion = new PromptDialog(this);
+		
+		accusation = new PromptDialog(this);
 	}
 
 	private JMenu createFileMenu() {
@@ -360,12 +362,14 @@ public class ClueGame extends JFrame {
 			}
 
 			control_panel.setButtonEnabled();
+			control_panel.setAccusationEnabled(false);
 			players.add(current_player);
 
 		} else {
 			is_human_turn = true;
 			System.out.println("Human...");
 			control_panel.setDisabled();
+			control_panel.setAccusationEnabled(true);
 
 			for (BoardCell c : board.getTargets() ) {
 				c.makeHighlighted();
@@ -423,6 +427,9 @@ public class ClueGame extends JFrame {
 		return suggestion;
 	}
 
+	public PromptDialog getAccusation() {
+		return accusation;
+	}
 	public ControlPanel getControl_panel() {
 		return control_panel;
 	}

@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import player.ComputerPlayer;
 import player.Player;
@@ -26,6 +27,9 @@ public class PromptDialog extends JDialog  {
 	private JButton cancel;
 
 	private ClueGame clue_game;
+	
+
+	boolean suggestions = false;
 	
 	public PromptDialog(ClueGame game) {
 		// TODO Auto-generated constructor stub
@@ -69,18 +73,39 @@ public class PromptDialog extends JDialog  {
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("you clicked submit");
-				
-				Suggestion s = new Suggestion(getPerson(), getWeapon(), getRoom());
-				
-				clue_game.doSuggestions(s,(RoomCell)clue_game.getCurrent_player().getCurrentCell());
-				
-				clue_game.endHumanTurn();
+				if(suggestions){
+					System.out.println("you clicked submit");
+
+					Suggestion s = new Suggestion(getPerson(), getWeapon(), getRoom());
+
+					clue_game.doSuggestions(s,(RoomCell)clue_game.getCurrent_player().getCurrentCell());
+
+					clue_game.endHumanTurn();
+					setVisible(false);
+				} else {
+					if (clue_game.getSoln().guessIsCorrect(getPerson().getName(), getWeapon().getName(), getRoom().getName())){
+						JOptionPane.showMessageDialog (null, "Correct!", "Correct!", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog (null, "Incorrect", "Incorrect", JOptionPane.INFORMATION_MESSAGE);
+					}
+					setVisible(false);
+					clue_game.getControl_panel().setAccusationEnabled(false);
+				}
+			}
+		});
+		
+		cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
 				setVisible(false);
 			}
 		});
 
 
+	}
+	
+	public void setSuggestions(boolean b) {
+		suggestions = b;
 	}
 
 	public void setRoom(String room){
